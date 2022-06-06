@@ -16,7 +16,7 @@ import com.facebook.stetho.Stetho;
  *     // use client to send requests to API
  *
  */
-public class RestApplication extends Application {
+public class JitterrApp extends Application {
 
     MyDatabase myDatabase;
 
@@ -32,8 +32,8 @@ public class RestApplication extends Application {
         Stetho.initializeWithDefaults(this);
     }
 
-    public static RestClient getRestClient(Context context) {
-        return (RestClient) RestClient.getInstance(RestClient.class, context);
+    public static JitterClient getRestClient(Context context) {
+        return (JitterClient) JitterClient.getInstance(JitterClient.class, context);
     }
 
     public MyDatabase getMyDatabase() {
