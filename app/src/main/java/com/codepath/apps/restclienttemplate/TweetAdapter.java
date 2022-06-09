@@ -129,6 +129,51 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
                     context.startActivity(i);
                 }
             });
+
+            // set up favorite button
+            boolean favoriteFlag = false;
+
+            if (!favoriteFlag) {
+                btnFavorite.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Glide.with(context).load(R.drawable.ic_vector_heart).into(btnFavorite);
+                    }
+                });
+                favoriteFlag = true;
+            }
+            else {
+                btnFavorite.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Glide.with(context).load(R.drawable.ic_vector_heart_stroke).into(btnFavorite);
+                    }
+                });
+                favoriteFlag = false;
+            }
+
+            // set up retweet button
+            boolean retweetFlag = false;
+
+            if (!retweetFlag) {
+                btnRetweet.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Glide.with(context).load(R.drawable.ic_vector_retweet).into(btnRetweet);
+                    }
+                });
+                retweetFlag = true;
+            }
+            else {
+                btnRetweet.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Glide.with(context).load(R.drawable.ic_vector_retweet_stroke).into(btnRetweet);
+                    }
+                });
+                retweetFlag = false;
+            }
+
         }
     }
 

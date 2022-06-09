@@ -24,12 +24,15 @@ public class Tweet {
     public int retweetCount;
     public int favouritesCount;
     public boolean replyFlag;
+    public String id;
 
     public Tweet() {}
 
     public static Tweet fromJson(JSONObject jsonObject) throws JSONException {
         Tweet tweet = new Tweet();
         tweet.replyFlag = false;            // set Flag to false intially
+
+        tweet.id = jsonObject.getString("id_str");
 
         if (jsonObject.has("full_text")) {
             tweet.body = jsonObject.getString("full_text");
