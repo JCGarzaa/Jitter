@@ -1,9 +1,11 @@
 package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,6 +17,8 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -56,31 +60,75 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         ImageView ivProfileImage;
         TextView tvBody;
         TextView tvScreenName;
+        TextView tvTimestamp;
+        TextView tvName;
         ImageView ivEmbedImage;
+
+        ImageButton btnReply;
+        TextView tvComments;
+
+        ImageButton btnRetweet;
+        TextView tvRetweetCount;
+
+        ImageButton btnFavorite;
+        TextView tvFavouritesCount;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ivProfileImage = itemView.findViewById(R.id.ivProfileImage);
             tvBody = itemView.findViewById(R.id.tvBody);
             tvScreenName = itemView.findViewById(R.id.tvScreenName);
+            tvTimestamp = itemView.findViewById(R.id.tvTimestamp);
+            tvName = itemView.findViewById(R.id.tvName);
             ivEmbedImage = itemView.findViewById(R.id.ivEmbedImage);
             ivEmbedImage.setVisibility(View.GONE);     // intially set up as invisible
+
+            tvComments = itemView.findViewById(R.id.tvCommentCount);
+            btnReply = itemView.findViewById(R.id.btnComment);
+
+            tvRetweetCount = itemView.findViewById(R.id.tvRetweetCount);
+            btnRetweet = itemView.findViewById(R.id.btnRetweet);
+
+            tvFavouritesCount = itemView.findViewById(R.id.tvFavoriteCount);
+            btnFavorite = itemView.findViewById(R.id.btnFavorite);
         }
 
         public void bind(Tweet tweet) {
-            RequestOptions requestOptions = new RequestOptions();
-            requestOptions = requestOptions.transform(new CenterCrop(), new RoundedCorners(45));
+            RequestOptions requestOptionsIMG = new RequestOptions();
+            RequestOptions requestOptionsPFP = new RequestOptions();
+            requestOptionsPFP = requestOptionsPFP.transform(new CenterCrop(), new RoundedCorners(65));
+            requestOptionsIMG = requestOptionsIMG.transform(new CenterCrop(), new RoundedCorners(45));
 
             tvBody.setText(tweet.body);
-            tvScreenName.setText(tweet.user.screenName);
-            Glide.with(context).load(tweet.user.profileImageURL).apply(requestOptions).into(ivProfileImage);
+            tvScreenName.setText("@" + tweet.user.screenName);
+            tvName.setText(tweet.user.name);
+
+            tvRetweetCount.setText(String.valueOf(tweet.retweetCount));
+            tvFavouritesCount.setText(String.valueOf(tweet.favouritesCount));
+            //tvComments.setText(String.valueOf(tweet.commentCount));
 
 
+            Glide.with(context).load(tweet.user.profileImageURL).apply(requestOptionsPFP).into(ivProfileImage);
 
             if (!tweet.imageURL.equals("")) {
-                Glide.with(context).load(tweet.imageURL).apply(requestOptions).into(ivEmbedImage);
+                Glide.with(context).load(tweet.imageURL).apply(requestOptionsIMG).into(ivEmbedImage);
                 ivEmbedImage.setVisibility(View.VISIBLE);
             }
+
+            // set timestamp
+            tvTimestamp.setText(tweet.timestamp);
+
+
+            // Set up Reply feature
+            btnReply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    tweet.replyFlag = true;
+                    Intent i = new Intent(context, ComposeActivity.class);
+                    i.putExtra("tweet", Parcels.wrap(tweet));
+                    context.startActivity(i);
+                }
+            });
         }
     }
 

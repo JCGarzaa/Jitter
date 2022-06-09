@@ -38,6 +38,15 @@ public class ComposeActivity extends AppCompatActivity {
         etCompose = findViewById(R.id.etCompose);
         btnTweet = findViewById(R.id.btnTweet);
 
+        //TODO UNWRAP PARCEL OF TWEET, GET NAME OF POST, ADD @ for account and then allow to reply
+        Tweet tweet = (Tweet) Parcels.unwrap(getIntent().getParcelableExtra("tweet"));
+        String username = tweet.user.screenName;
+
+        // add @username to beginning of compose if reply button has been clicked
+        if (tweet.replyFlag) {
+            etCompose.setText("@" + username);
+        }
+
         // Set click listener
         btnTweet.setOnClickListener(new View.OnClickListener() {
             @Override

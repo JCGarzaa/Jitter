@@ -18,28 +18,126 @@
         android:id="@+id/tvScreenName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        app:layout_constraintStart_toEndOf="@+id/ivProfileImage"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@+id/tvName"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="jcgarza_" />
+        tools:text="\@jcgarza_" />
 
     <TextView
         android:id="@+id/tvBody"
-        android:layout_width="wrap_content"
+        android:layout_width="320dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:layout_marginTop="2dp"
+        android:autoLink="all"
+        android:linksClickable="true"
         app:layout_constraintStart_toEndOf="@+id/ivProfileImage"
-        app:layout_constraintTop_toBottomOf="@+id/tvScreenName"
-        tools:text="This is my first tweet!" />
+        app:layout_constraintTop_toBottomOf="@+id/tvName"
+        tools:text="This is my first " />
 
     <ImageView
         android:id="@+id/ivEmbedImage"
         android:layout_width="311dp"
         android:layout_height="216dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="6dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnComment"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvBody"
+        app:layout_constraintVertical_bias="0.647"
         tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/tvTimestamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="5d" />
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/ivProfileImage"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="JC GARZA" />
+
+    <ImageButton
+        android:id="@+id/btnRetweet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="#FFFFFF"
+        android:src="@drawable/ic_vector_retweet_stroke"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnComment"
+        app:layout_constraintTop_toBottomOf="@+id/ivEmbedImage" />
+
+    <ImageButton
+        android:id="@+id/btnComment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="108dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="#FFFFFF"
+        android:src="@drawable/ic_vector_messages_stroke"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivEmbedImage"
+        tools:text="COMMENT" />
+
+    <ImageButton
+        android:id="@+id/btnFavorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="120dp"
+        android:layout_marginBottom="8dp"
+        android:background="#FFFFFF"
+        android:src="@drawable/ic_vector_heart_stroke"
+        android:text="LIKE"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivEmbedImage" />
+
+    <TextView
+        android:id="@+id/tvFavoriteCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:textSize="10sp"
+        app:layout_constraintStart_toEndOf="@+id/btnFavorite"
+        app:layout_constraintTop_toBottomOf="@+id/ivEmbedImage"
+        tools:text="240K" />
+
+    <TextView
+        android:id="@+id/tvRetweetCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:textSize="10sp"
+        app:layout_constraintStart_toEndOf="@+id/btnRetweet"
+        app:layout_constraintTop_toBottomOf="@+id/ivEmbedImage"
+        tools:text="120.2 K" />
+
+    <TextView
+        android:id="@+id/tvCommentCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:textSize="10sp"
+        app:layout_constraintStart_toEndOf="@+id/btnComment"
+        app:layout_constraintTop_toBottomOf="@+id/ivEmbedImage"
+        tools:text="10K" />
 </androidx.constraintlayout.widget.ConstraintLayout>
