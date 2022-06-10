@@ -114,6 +114,9 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
                 Glide.with(context).load(tweet.imageURL).apply(requestOptionsIMG).into(ivEmbedImage);
                 ivEmbedImage.setVisibility(View.VISIBLE);
             }
+            else {
+                ivEmbedImage.setVisibility(View.GONE);
+            }
 
             // set timestamp
             tvTimestamp.setText(tweet.timestamp);

@@ -23,14 +23,14 @@ public class Tweet {
     public int commentCount;
     public int retweetCount;
     public int favouritesCount;
-    public boolean replyFlag;
+    public Boolean replyFlag;
     public String id;
 
-    public Tweet() {}
+    public Tweet() { replyFlag = false;}
 
     public static Tweet fromJson(JSONObject jsonObject) throws JSONException {
         Tweet tweet = new Tweet();
-        tweet.replyFlag = false;            // set Flag to false intially
+        //tweet.replyFlag = false;            // set Flag to false intially
 
         tweet.id = jsonObject.getString("id_str");
 

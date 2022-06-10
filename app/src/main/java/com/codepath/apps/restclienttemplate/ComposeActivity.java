@@ -42,9 +42,17 @@ public class ComposeActivity extends AppCompatActivity {
         Tweet tweet = (Tweet) Parcels.unwrap(getIntent().getParcelableExtra("tweet"));
 
         // add @screenName to beginning of compose if reply button has been clicked
-        if (tweet.replyFlag) {
-            etCompose.setText("@" + tweet.user.screenName + " ");
+        //TODO: Fix compose
+
+        try {
+            if (tweet.replyFlag != null) {
+                etCompose.setText("@" + tweet.user.screenName + " ");
+            }
         }
+        catch (NullPointerException n) {
+
+        }
+
 
         // Set click listener
         btnTweet.setOnClickListener(new View.OnClickListener() {
@@ -59,6 +67,7 @@ public class ComposeActivity extends AppCompatActivity {
                     Toast.makeText(ComposeActivity.this, "Tweet too long!", Toast.LENGTH_SHORT).show();
                 }
                 Toast.makeText(ComposeActivity.this, tweetContent, Toast.LENGTH_LONG).show();
+
 
                 client.publishTweet(tweetContent, new JsonHttpResponseHandler() {
                     @Override
