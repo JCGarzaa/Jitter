@@ -139,14 +139,21 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
                 }
             });
 
-
-
             // set up retweet button
             btnRetweet.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Glide.with(context).load(R.drawable.ic_vector_retweet).into(btnRetweet);
                     tvRetweetCount.setText(String.valueOf(tweet.retweetCount + 1));       // increment retweet count
+                }
+            });
+
+            ivProfileImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(context, ProfileActivity.class);
+                    i.putExtra("user", Parcels.wrap(tweet.user));
+                    context.startActivity(i);
                 }
             });
 
