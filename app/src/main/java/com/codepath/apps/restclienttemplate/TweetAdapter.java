@@ -2,6 +2,7 @@ package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,14 +18,17 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
 import org.parceler.Parcels;
 
 import java.util.List;
 
+import okhttp3.Headers;
+
 public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> {
     Context context;
-     List<Tweet> tweets;
+    List<Tweet> tweets;
 
     // Pass in context and list of tweets
     public TweetAdapter(Context context, List<Tweet> tweets) {
@@ -105,10 +109,23 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
             tvRetweetCount.setText(String.valueOf(tweet.retweetCount));
             tvFavouritesCount.setText(String.valueOf(tweet.favouritesCount));
-            //tvComments.setText(String.valueOf(tweet.commentCount));
+
+            if (tweet.isFavorited) {
+                Glide.with(context).load(R.drawable.ic_vector_heart).into(btnFavorite);             // load favorited picture
+            }
+            else {
+                Glide.with(context).load(R.drawable.ic_vector_heart_stroke).into(btnFavorite);      // load unfavorited picture
+            }
+
+            if (tweet.isRetweeted) {
+                Glide.with(context).load(R.drawable.ic_vector_retweet).into(btnRetweet);            // load retweeted picture
+            }
+            else {
+                Glide.with(context).load(R.drawable.ic_vector_retweet_stroke).into(btnRetweet);     // load unretweeted picture
+            }
 
 
-            Glide.with(context).load(tweet.user.profileImageURL).apply(requestOptionsPFP).into(ivProfileImage);
+            Glide.with(context).load(tweet.user.profileImageURL).apply(requestOptionsPFP).into(ivProfileImage);     // load profile image
 
             if (!tweet.imageURL.equals("")) {
                 Glide.with(context).load(tweet.imageURL).apply(requestOptionsIMG).into(ivEmbedImage);
@@ -120,7 +137,6 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
             // set timestamp
             tvTimestamp.setText(tweet.timestamp);
-
 
             // Set up Reply feature
             btnReply.setOnClickListener(new View.OnClickListener() {
@@ -137,8 +153,44 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             btnFavorite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Glide.with(context).load(R.drawable.ic_vector_heart).into(btnFavorite);
-                    tvFavouritesCount.setText(String.valueOf(tweet.favouritesCount + 1));     // increment like count
+                    // if not favorited
+                    if (!tweet.isFavorited) {
+                        // Tell twitter to favorite tweet
+                        JitterrApp.getRestClient(context).favoriteTweet(tweet.id, new JsonHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                                Log.i("adapter", "Tweet favorited hopefully");
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                                Log.e("adapter", "failed to favorite");
+                            }
+                        });
+
+                        Glide.with(context).load(R.drawable.ic_vector_heart).into(btnFavorite);             // load liked picture
+                        tvFavouritesCount.setText(String.valueOf(++tweet.favouritesCount));                 // increment like count
+                        tweet.isFavorited = true;       // Set to true
+                    }
+                    else {
+                        // Tell twitter to unfavorite
+                        JitterrApp.getRestClient(context).unfavoriteTweet(tweet.id, new JsonHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                                Log.i("adapter", "Tweet unfavorited hopefully");
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                                Log.e("adapter", "failed to unfavorite");
+                            }
+                        });
+
+                        Glide.with(context).load(R.drawable.ic_vector_heart_stroke).into(btnFavorite);      // load unliked picture
+                        tvFavouritesCount.setText(String.valueOf(--tweet.favouritesCount));                 // decrement like count
+                        tweet.isFavorited = false;
+                    }
+
                 }
             });
 
@@ -146,8 +198,45 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             btnRetweet.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Glide.with(context).load(R.drawable.ic_vector_retweet).into(btnRetweet);
-                    tvRetweetCount.setText(String.valueOf(tweet.retweetCount + 1));       // increment retweet count
+                    if (!tweet.isRetweeted) {
+                        // Tell twitter to retweet
+                        JitterrApp.getRestClient(context).retweetTweet(tweet.id, new JsonHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                                Log.i("adapter", "Tweet retweeted");
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                                Log.e("adapter", "failed to retweet");
+                            }
+                        });
+
+                        Glide.with(context).load(R.drawable.ic_vector_retweet).into(btnRetweet);
+                        tvRetweetCount.setText(String.valueOf(tweet.retweetCount + 1));         // increment retweet count
+                        tweet.isRetweeted = true;
+
+                    }
+                    else {
+                        // Tell twitter to unretweet
+                        JitterrApp.getRestClient(context).unretweetTweet(tweet.id, new JsonHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                                Log.i("adapter", "Successfully retweeted");
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                                Log.e("adapter", "Failed to retweet");
+                            }
+                        });
+
+                        Glide.with(context).load(R.drawable.ic_vector_retweet_stroke).into(btnRetweet);
+                        tvRetweetCount.setText(String.valueOf(tweet.retweetCount));             // decrement retweet count
+                        tweet.isRetweeted = false;
+
+                    }
+
                 }
             });
 

@@ -90,7 +90,6 @@ public class TimelineActivity extends AppCompatActivity {
 
         populateHomeTimeline(null);         // passing null as we want the first 25
 
-
         // Retain an instance so that you can call `resetState()` for fresh searches
         scrollListener = new EndlessRecyclerViewScrollListener(llm) {
             @Override

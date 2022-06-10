@@ -1,6 +1,7 @@
 package com.codepath.apps.restclienttemplate;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
@@ -15,7 +16,14 @@ import com.codepath.apps.restclienttemplate.models.User;
 
 import org.parceler.Parcels;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ProfileActivity extends AppCompatActivity {
+
+    JitterClient client;
+    List<User> userList;
+    ProfileAdapter adapter;
 
     RecyclerView rvFollow;
     Button btnFollowers;
@@ -24,13 +32,21 @@ public class ProfileActivity extends AppCompatActivity {
     ImageView ivProfileBanner;
     RequestOptions requestOptionsPFP;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        client =  JitterrApp.getRestClient(this);
+
+        // Setup Recycler View
         rvFollow = findViewById(R.id.rvFollow);
+        userList = new ArrayList<>();
+        adapter = new ProfileAdapter(this, userList);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        rvFollow.setLayoutManager(llm);
+        rvFollow.setAdapter(adapter);
+
         btnFollowers = findViewById(R.id.btnFollowers);
         btnFollowing = findViewById(R.id.btnFollowing);
         ivProfilePic = findViewById(R.id.ivProfilePic);
