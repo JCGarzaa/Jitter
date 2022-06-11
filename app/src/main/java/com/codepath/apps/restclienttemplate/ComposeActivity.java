@@ -42,16 +42,12 @@ public class ComposeActivity extends AppCompatActivity {
         Tweet tweet = (Tweet) Parcels.unwrap(getIntent().getParcelableExtra("tweet"));
 
         // add @screenName to beginning of compose if reply button has been clicked
-        //TODO: Fix compose
-
         try {
             if (tweet.replyFlag != null) {
                 etCompose.setText("@" + tweet.user.screenName + " ");
             }
         }
-        catch (NullPointerException n) {
-
-        }
+        catch (NullPointerException n) {}       // catch exception if compose clicked
 
 
         // Set click listener

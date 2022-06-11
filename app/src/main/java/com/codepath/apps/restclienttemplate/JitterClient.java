@@ -58,6 +58,17 @@ public class JitterClient extends OAuthBaseClient {
 		client.get(apiUrl, params, handler);
 	}
 
+	public void getFollowers(String screen_name, JsonHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("followers/list.json");
+
+		RequestParams params = new RequestParams();
+		params.put("screen_name", screen_name);
+
+		params.put("count", 40);
+		client.get(apiUrl, params, handler);
+
+	}
+
 	public void publishTweet(String tweetContent, JsonHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("statuses/update.json");
 		// Can specify query string params directly or through RequestParams.
@@ -97,6 +108,7 @@ public class JitterClient extends OAuthBaseClient {
 		params.put("id", tweetId);
 		client.post(apiUrl, params, "", handler);
 	}
+
 
 
 

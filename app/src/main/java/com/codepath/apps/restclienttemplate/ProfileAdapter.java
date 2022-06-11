@@ -18,7 +18,6 @@ import org.w3c.dom.Text;
 import java.util.List;
 
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHolder> {
-
     Context context;
     List<User> usersList;
 
@@ -30,14 +29,14 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
     // for each row, inflate a layout for a profile
     @NonNull
     @Override
-    public ProfileAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_profile, parent, false);
-        return new ProfileAdapter.ViewHolder(view);
+        return new ViewHolder(view);
     }
 
     // bind values based on the position of the element
     @Override
-    public void onBindViewHolder(@NonNull ProfileAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         // Get data at position
         User user = usersList.get(position);
         // Bind tweet with viewholder
@@ -48,7 +47,6 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
     public int getItemCount() {
         return usersList.size() ;
     }
-
 
     // Used to cache the views within the item layout for fast access
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -71,7 +69,9 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
         public void bind(User user) {
             tvProfileName.setText(user.name);
             tvUsername.setText(user.screenName);
-            Glide.with(context).load(user.profileImageURL).into(ivProfilePic);
+            if(user.profileImageURL != null) {
+                Glide.with(context).load(user.profileImageURL).into(ivProfilePic);
+            }
         }
     }
 
